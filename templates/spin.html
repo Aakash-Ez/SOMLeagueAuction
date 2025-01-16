@@ -134,7 +134,7 @@
             const spinAnimation = wheelCanvas.animate(
                 [
                     { transform: 'rotate(0deg)' },
-                    { transform: `rotate(${360 * totalRotations + (finalAngle * 180) / Math.PI}deg)` }
+                    { transform: `rotate(₹{360 * totalRotations + (finalAngle * 180) / Math.PI}deg)` }
                 ],
                 {
                     duration,
@@ -153,7 +153,7 @@
         wheelCanvas.addEventListener('click', spinWheel);
 
         continueButton.addEventListener('click', () => {
-            alert(`Continuing with ${selectedPlayerElement.textContent}`);
+            alert(`Continuing with ₹{selectedPlayerElement.textContent}`);
         });
 
         deleteButton.addEventListener('click', () => {
@@ -161,7 +161,7 @@
             const index = players.indexOf(playerToDelete);
             if (index > -1) {
                 players.splice(index, 1);
-                alert(`${playerToDelete} has been deleted.`);
+                alert(`₹{playerToDelete} has been deleted.`);
                 resultContainer.style.display = 'none';
                 ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
                 drawWheel(players);
