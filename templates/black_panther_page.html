@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ team_name }} - Team Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+        }
+        .team-banner {
+            background: linear-gradient(to right, var(--team-color-start), var(--team-color-end));
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 20px;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .team-logo {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 100px;
+        }
+        .team-banner h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+        .team-banner p {
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+        .player-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .player-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid var(--team-color-start);
+        }
+        .player-card h5 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        .player-card p {
+            margin-bottom: 0;
+        }
+        .chart-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-secondary {
+            background: var(--team-color-end);
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: var(--team-color-end);
+        }
+    </style>
+</head>
+<body style="--team-color-start: {{ team_color_start }}; --team-color-end: {{ team_color_end }};">
+    <div class="container mt-4">
+        <div class="team-banner">
+            <img src="{{ team_logo }}" alt="{{ team_name }} Logo" class="team-logo">
+            <h1>{{ team_name }}</h1>
+            <p>Unleashing the power within! Meet the players and explore the stats.</p>
+        </div>
+
+        <!-- Team Stats -->
+        <div class="chart-container">
+            <h3 class="text-center">Team Statistics</h3>
+            <canvas id="teamStatsChart" height="100"></canvas>
+        </div>
+
+        <!-- Player Roster -->
+        <div>
+            <h3 class="text-center mb-4">Player Roster</h3>
+            <div class="row">
+                {% for player in team_players %}
+                <div class="col-md-4">
+                    <div class="player-card">
+                        <img src="{{ player.Image or '/static/default-avatar.png' }}" alt="{{ player.Name }}" class="player-image">
+                        <div>
+                            <h5>{{ player.Name }}</h5>
+                            <p><strong>Batch:</strong> {{ player.Batch }}</p>
+                            <p><strong>Price:</strong> ${{ player.Price }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary btn-lg">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        const teamStatsData = {{ team_stats_data | safe }};
+
+        new Chart(document.getElementById('teamStatsChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: teamStatsData.categories,
+                datasets: [
+                    {
+                        label: 'Count',
+                        data: teamStatsData.values,
+                        backgroundColor: ['{{ graph_color }}']
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: '{{ team_name }} Statistics' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

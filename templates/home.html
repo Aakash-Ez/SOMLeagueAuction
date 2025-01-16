@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Team Summary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .team-card {
+            margin-bottom: 20px;
+        }
+        .stats-bar {
+            height: 25px;
+            background: linear-gradient(to right, #28a745, #dc3545);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Auction Summary</h1>
+
+        <!-- Budget and Remaining Budget Stacked Bar -->
+<div class="mt-4">
+    <h3>Team Budgets</h3>
+    {% for team, stats in team_stats.items() %}
+    <div class="team-card">
+        <h5>{{ team }}</h5>
+        <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: {{ (stats.budget / 60) * 100 }}%" aria-valuenow="{{ stats.budget }}" aria-valuemin="0" aria-valuemax="60"></div>
+        </div>
+        <p class="mt-1">Remaining Budget: ${{ stats.budget }} / Total Budget: $60</p>
+        <!-- Individual Team Data Points -->
+        <ul>
+            <li>Total Players: {{ stats.total_players }}</li>
+            <li>Total Male Players: {{ stats.total_male }}</li>
+            <li>Total Female Players: {{ stats.total_female }}</li>
+            <li>Total Batch 25 Players: {{ stats.total_batch_25 }}</li>
+            <li>Total Batch 26 Players: {{ stats.total_batch_26 }}</li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+
+
+        <!-- Total Players Bought -->
+        <div class="mt-4">
+            <h3>Overall Statistics</h3>
+            <ul>
+                <li>Total Players Bought: {{ total_players }}</li>
+                <li>Total Male Players: {{ total_male }}</li>
+                <li>Total Female Players: {{ total_female }}</li>
+                <li>Total Batch 25 Players: {{ total_batch_25 }}</li>
+                <li>Total Batch 26 Players: {{ total_batch_26 }}</li>
+            </ul>
+        </div>
+
+        <!-- Team-Specific Pages -->
+        <div class="mt-4">
+            <h3>View Teams</h3>
+            <div class="row">
+                {% for team, data in team_stats.items() %}
+                <div class="col-md-3 text-center">
+                    <a href="/team/{{ team }}" class="btn btn-secondary btn-block">View {{ team }}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
